@@ -5,3 +5,5 @@ venv/
 models/
 runs/
 src/realsense-ros/
+__pycache__/
+src/wave_detection/results/
