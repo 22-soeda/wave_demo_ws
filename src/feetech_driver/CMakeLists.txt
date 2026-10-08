@@ -68,7 +68,9 @@ install(
 # 手で使う道具（tools）
 add_executable(feetech_scan tools/feetech_scan.cpp)
 target_link_libraries(feetech_scan feetech_driver)
-install(TARGETS feetech_scan DESTINATION lib/${PROJECT_NAME})
+add_executable(feetech_jog tools/feetech_jog.cpp)
+target_link_libraries(feetech_jog feetech_driver)
+install(TARGETS feetech_scan feetech_jog DESTINATION lib/${PROJECT_NAME})
 
 
 # colcon test で走るlint と gtest
