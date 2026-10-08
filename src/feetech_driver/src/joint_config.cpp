@@ -13,7 +13,6 @@ namespace
 
 constexpr double kCountsPerRad = kCountsPerRev / (2.0 * kPi);
 
-// 
 void check(bool ok, const JointConfig & j, const std::string & what)
 {
   if (!ok) {

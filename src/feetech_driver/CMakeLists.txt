@@ -33,6 +33,7 @@ set_target_properties(scservo PROPERTIES POSITION_INDEPENDENT_CODE ON)
 # 自作のライブラリ（PRIVATE）
 add_library(feetech_driver SHARED
   src/joint_config.cpp
+  src/servo_bus.cpp
 )
 
 # おまじない
@@ -63,6 +64,12 @@ install(
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
 )
+
+# 手で使う道具（tools）
+add_executable(feetech_scan tools/feetech_scan.cpp)
+target_link_libraries(feetech_scan feetech_driver)
+install(TARGETS feetech_scan DESTINATION lib/${PROJECT_NAME})
+
 
 # colcon test で走るlint と gtest
 if(BUILD_TESTING)
