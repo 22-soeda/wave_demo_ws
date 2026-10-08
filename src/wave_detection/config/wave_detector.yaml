@@ -1,0 +1,7 @@
+wave_detector:
+  ros__parameters:
+    model_path: ~/wave_demo_ws/models/yolo26n-pose_ncnn_model
+    imgsz: 320
+    conf: 0.4
+    tracker: bytetrack.yaml
+    preriod: 0.1
