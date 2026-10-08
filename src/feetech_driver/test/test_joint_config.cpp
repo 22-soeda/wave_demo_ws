@@ -3,12 +3,14 @@
 #include <cmath>
 #include <stdexcept>
 #include <utility>
+#include <vector>
 
 #include "feetech_driver/joint_config.hpp"
 
 using feetech_driver::JointConfig;
 using feetech_driver::deg_to_rad;
 using feetech_driver::validate;
+using feetech_driver::validate_joints;
 
 namespace
 {
@@ -103,4 +105,32 @@ TEST(Validate, RejectsBadConfig)
   j = make_joint(1);
   j.home_count = 4000;  // +60 deg の端が 4000 + 683 になり、4095 を超える
   EXPECT_THROW(validate(j), std::invalid_argument);
+}
+
+TEST(ValidateJoints, SameIdOnDifferentPortsIsOk)
+{
+  // 左右のバスに同じ ID 8 があるのは正しい
+  JointConfig r = make_joint(1);
+  r.name = "r_shoulder_pitch";
+  r.port = "/dev/feetech_right";
+  JointConfig l = make_joint(1);
+  l.name = "l_shoulder_pitch";
+  l.port = "/dev/feetech_left";
+  EXPECT_NO_THROW(validate_joints({r, l}));
+}
+
+TEST(ValidateJoints, RejectsDuplicates)
+{
+  JointConfig a = make_joint(1);
+  a.name = "a";
+  JointConfig b = make_joint(1);
+  b.name = "a";  // 関節名が重複
+  b.id = 9;
+  EXPECT_THROW(validate_joints({a, b}), std::invalid_argument);
+
+  b.name = "b";
+  b.id = a.id;  // 同じポート・同じ ID
+  EXPECT_THROW(validate_joints({a, b}), std::invalid_argument);
+
+  EXPECT_THROW(validate_joints({}), std::invalid_argument);
 }

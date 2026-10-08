@@ -34,6 +34,7 @@ set_target_properties(scservo PROPERTIES POSITION_INDEPENDENT_CODE ON)
 add_library(feetech_driver SHARED
   src/joint_config.cpp
   src/servo_bus.cpp
+  src/joint_driver.cpp
 )
 
 # おまじない

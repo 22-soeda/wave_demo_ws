@@ -2,6 +2,7 @@
 #define FEETECH_DRIVER__JOINT_CONFIG_HPP_
 
 #include <string>
+#include <vector>
 
 namespace feetech_driver
 {
@@ -36,6 +37,10 @@ struct JointConfig
 
 //値を検査する
 void validate(const JointConfig & j);
+
+// 全関節を検査する（関節ごとの validate と、関節名・ポートと ID の重複）。
+// おかしければ std::invalid_argument
+void validate_joints(const std::vector<JointConfig> & joints);
 
 }  // namespace feetech_driver
 

@@ -4,6 +4,9 @@
 #include <cmath>
 #include <stdexcept>
 #include <string>
+#include <set>
+#include <utility>
+#include <vector>
 
 namespace feetech_driver
 {
@@ -50,6 +53,20 @@ void validate(const JointConfig & j)
   for (const double lim : {j.min_rad, j.max_rad}) {
     const int c = j.to_count(lim);
     check(0 <= c && c < kCountsPerRev, j, "可動域の端がカウント 0〜4095 の外に出ます");
+  }
+}
+
+void validate_joints(const std::vector<JointConfig> & joints)
+{
+  if (joints.empty()) {
+    throw std::invalid_argument("関節が 1 つもありません");
+  }
+  std::set<std::string> names;
+  std::set<std::pair<std::string, int>> servos;  // (ポート, ID)
+  for (const auto & j : joints) {
+    validate(j);
+    check(names.insert(j.name).second, j, "関節名が重複しています");
+    check(servos.insert({j.port, j.id}).second, j, "同じポート・ID の関節がほかにあります");
   }
 }
 
